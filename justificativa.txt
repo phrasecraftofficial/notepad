@@ -6,6 +6,7 @@ Apresento uma solução de Dashboard de Autogestão Dark, projetada para rodar l
 
 Esta iniciativa visa reduzir erros de interpretação, aumentar o engajamento com as metas operacionais e garantir que cada integrante da equipe tenha o domínio técnico necessário para garantir o recebimento de sua remuneração variável de forma simples, segura e visual.
 
+Para facilitar a análise técnica, envio em anexo o código-fonte (HTML/JS) da ferramenta. Ressalto que o script foi desenvolvido utilizando exclusivamente tecnologias client-side, o que significa que ele não requer integração com bancos de dados, não armazena informações sensíveis e opera em um ambiente isolado (sandbox) dentro do Google Sites. Sugiro que este material seja encaminhado ao setor de TI/Segurança da Informação para validação, assegurando que a solução cumpre todos os protocolos internos enquanto promove a eficiência e a transparência na nossa operação.
 
 🔒 Argumentos de Segurança (Guia para TI/Compliance)
 
