@@ -1,0 +1,31 @@
+🔒 Argumentos de Segurança (Guia para TI/Compliance)
+1. Ausência de Banco de Dados (Stateless)
+O código não possui conexão com bancos de dados externos, Firebase ou APIs. Isso significa que nenhum dado inserido é armazenado. Assim que o usuário fecha a aba ou atualiza a página, todas as informações digitadas desaparecem permanentemente.
+
+2. Execução Local (Client-Side)
+Todo o processamento lógico (os cálculos de produtividade e saldo) ocorre exclusivamente no navegador do colaborador.
+
+Não há tráfego de dados: Os números digitados não "viajam" pela internet.
+
+Privacidade: O Google Sites apenas hospeda o "esqueleto" da página; a "inteligência" roda na memória RAM do computador do usuário.
+
+3. Código Aberto e Auditável (Vanilla JS)
+O script utiliza apenas HTML5, CSS3 e JavaScript puro (Vanilla). Não foram utilizadas bibliotecas de terceiros (como jQuery, React ou scripts de fontes externas/CDNs desconhecidas).
+
+"Qualquer analista de segurança pode ler as ~100 linhas de código em 5 minutos e verificar que não há funções de 'fetch', 'post' ou qualquer tentativa de exportação de dados (Exfiltração)."
+
+4. Sandbox do Google Sites
+Ao inserir esse código em um elemento de "Incorporação" (Embed) do Google Sites, o Google automaticamente isola esse script dentro de um iframe com sandbox. Isso garante que o script não tenha acesso aos cookies da empresa, aos arquivos do Google Drive ou a outras informações da conta Google do usuário.
+
+📝 Resumo Executivo (Para seu Gestor)
+Se precisar de um texto curto para enviar por e-mail ou chat, use este:
+
+"A ferramenta de controle de metas proposta é estritamente uma calculadora de interface. Ela funciona de forma passiva, funcionando como uma planilha de Excel simplificada dentro do navegador.
+
+Segurança: Não coleta nomes, IDs ou dados sensíveis.
+
+Privacidade: Não salva histórico; os dados morrem ao fechar a aba.
+
+Integridade: Não interage com outros sistemas da empresa, eliminando riscos de vulnerabilidades cruzadas.
+
+É uma solução 'Zero-Data-Footprint' (pegada de dados zero) focada apenas em auxiliar o colaborador na autogestão de seus indicadores."
