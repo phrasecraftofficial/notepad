@@ -1,8 +1,20 @@
+Proposta: Otimização da Autogestão e Entrega de Variável
+
+Identificamos na operação uma necessidade latente de maior transparência e controle individual sobre os indicadores de pausas e produtividade. Atualmente, a complexidade no cálculo das tolerâncias e o impacto seletivo de categorias como Non-FB e Compensação geram incertezas quanto ao atingimento da meta de 95% da jornada prevista (6h52).
+
+Apresento uma solução de Dashboard de Autogestão Dark, projetada para rodar localmente no Google Sites. A ferramenta automatiza a lógica de descontos excedentes e bonificações de tempo, permitindo que o colaborador visualize, em tempo real, seu saldo de minutos e a projeção exata de sua produtividade.
+
+Esta iniciativa visa reduzir erros de interpretação, aumentar o engajamento com as metas operacionais e garantir que cada integrante da equipe tenha o domínio técnico necessário para garantir o recebimento de sua remuneração variável de forma simples, segura e visual.
+
+
 🔒 Argumentos de Segurança (Guia para TI/Compliance)
+
 1. Ausência de Banco de Dados (Stateless)
 O código não possui conexão com bancos de dados externos, Firebase ou APIs. Isso significa que nenhum dado inserido é armazenado. Assim que o usuário fecha a aba ou atualiza a página, todas as informações digitadas desaparecem permanentemente.
 
 2. Execução Local (Client-Side)
+Essa é uma ferramenta Client-Side (executada no lado do cliente).
+
 Todo o processamento lógico (os cálculos de produtividade e saldo) ocorre exclusivamente no navegador do colaborador.
 
 Não há tráfego de dados: Os números digitados não "viajam" pela internet.
@@ -29,3 +41,67 @@ Privacidade: Não salva histórico; os dados morrem ao fechar a aba.
 Integridade: Não interage com outros sistemas da empresa, eliminando riscos de vulnerabilidades cruzadas.
 
 É uma solução 'Zero-Data-Footprint' (pegada de dados zero) focada apenas em auxiliar o colaborador na autogestão de seus indicadores."
+
+
+================================================================================
+LOGICA DE CALCULO - DASHBOARD DE PRODUTIVIDADE E TOLERÂNCIAS
+================================================================================
+
+1. A BASE DE CALCULO (JORNADA PREVISTA)
+--------------------------------------------------------------------------------
+A base de referência para a variável é de 6h 52min.
+Para fins de precisão no JavaScript, convertemos esse tempo para minutos:
+Cálculo: (6 horas * 60 minutos) + 52 minutos = 412 minutos.
+
+Essa é a "constante de tempo" contra a qual todos os descontos e acréscimos
+serão aplicados para gerar o percentual final.
+
+2. LOGICA GERAL DE PAUSAS (EXCEDENTES)
+--------------------------------------------------------------------------------
+Para a maioria das categorias (Atraso, Meeting, Break, Lunch, etc.), o sistema
+trabalha com o conceito de "tolerância individual".
+
+- Regra: Se [Tempo Realizado] > [Tolerância], a diferença é acumulada como
+  um desconto na produtividade.
+- Exemplo: Se o Break tem 20 min de Tol. e você usou 21 min:
+  Desconto = 1 minuto (Apenas o excedente é retirado da base de 412 min).
+- Se o tempo estiver dentro da tolerância, o impacto na produtividade é ZERO.
+
+3. EXCEÇÃO: NON-FB (DESCONTO INTEGRAL)
+--------------------------------------------------------------------------------
+O campo 'Non-FB' possui uma regra distinta das demais pausas:
+- Regra: Todo e qualquer minuto inserido no campo "Total Realizado" do Non-FB
+  é descontado diretamente da base de 412 minutos, independentemente da 
+  tolerância definida.
+- Motivo: Esta categoria é tratada como tempo não produtivo por natureza.
+
+4. AJUSTE DE COMPENSAÇÃO (IMPACTO POSITIVO)
+--------------------------------------------------------------------------------
+A Compensação funciona de forma inversa para beneficiar o colaborador:
+- Regra: Se [Compensação Realizada] > [Compensação Tolerância], a diferença
+  é SOMADA à base de 412 minutos.
+- Exemplo: Tol = 5, Real = 7. O sistema adiciona +2 minutos ao tempo efetivo.
+- Impacto: Isso permite que a base de cálculo suba para 414 minutos, 
+  melhorando o percentual final.
+
+5. SALDO FINAL VS. PRODUTIVIDADE
+--------------------------------------------------------------------------------
+O código mantém dois cálculos independentes para finalidades diferentes:
+
+A) SALDO FINAL: Reflete o banco de minutos total.
+   Fórmula: (Soma de Todas as Tolerâncias) - (Soma de Todos os Realizados).
+   *Nota: Na compensação, o saldo é ajustado para que o tempo extra conte 
+    como saldo positivo (+).*
+
+B) % PRODUTIVIDADE: Reflete o cumprimento da meta para recebimento da variável.
+   Fórmula: ((412 - Descontos Integrais/Excedentes + Ganhos Compensação) / 412) * 100.
+
+6. META DE VARIÁVEL (95%)
+--------------------------------------------------------------------------------
+O resultado do cálculo (B) é comparado ao valor de 0.95 (95%).
+- Se o resultado >= 95%: Cor Verde (Meta atingida).
+- Se o resultado < 95%: Cor Vermelha (Abaixo da meta).
+
+================================================================================
+FIM DA DOCUMENTAÇÃO
+================================================================================
