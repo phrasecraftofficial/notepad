@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Dark - Controle de Pausas</title>
+    <style>
+        :root {
+            --bg-body: #121212;
+            --bg-card: #1e1e1e;
+            --primary: #bb86fc;
+            --secondary: #03dac6;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border: #333333;
+            --danger: #cf6679;
+            --success: #03dac6;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1000px;
+            background-color: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+            border: 1px solid var(--border);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .input-group {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: transform 0.2s;
+        }
+
+        .input-group:hover {
+            border-color: #444;
+            transform: translateY(-2px);
+        }
+
+        label {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .flex-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            width: 100%;
+            background: #252525;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px;
+            color: #fff;
+            outline: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            background: #2d2d2d;
+            box-shadow: 0 0 8px rgba(187, 134, 252, 0.2);
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .footer-stats {
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 2px solid var(--border);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+        }
+
+        .stat-item span {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .stat-item strong {
+            font-size: 1.5rem;
+            color: var(--text-main);
+        }
+
+        #res-saldo {
+            transition: color 0.3s;
+        }
+
+        .pos { color: var(--success) !important; }
+        .neg { color: var(--danger) !important; }
+
+        @media (max-width: 600px) {
+            .footer-stats { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Meta - Gestão de Pausas</h2>
+    
+    <div class="grid-inputs">
+        <div class="input-group">
+            <label>Mins. Atraso (Tol | Total)</label>
+            <div class="flex-row">
+                <input type="number" id="atraso-tol" class="tol" placeholder="Tol." value="0">
+                <input type="number" id="atraso-total" class="real" placeholder="Total" value="0">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Non-FB (Tol | Total)</label>
+            <div class="flex-row">
+                <input type="number" id="nfb-tol" class="tol" placeholder="Tol." value="0">
+                <input type="number" id="nfb-total" class="real" placeholder="Total" value="0">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Coaching (Tol | Total)</label>
+            <div class="flex-row">
+                <input type="number" id="coa-tol" class="tol" placeholder="Tol." value="0">
+                <input type="number" id="coa-total" class="real" placeholder="Total" value="0">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Meeting (Tol | Total)</label>
+            <div class="flex-row">
+                <input type="number" id="mee-tol" class="tol" placeholder="Tol." value="0">
+                <input type="number" id="mee-total" class="real" placeholder="Total" value="0">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>FB Learning (Tol | Total)</label>
+            <div class="flex-row">
+                <input type="number" id="fbl-tol" class="tol" placeholder="Tol." value="0">
+                <input type="number" id="fbl-total" class="real" placeholder="Total" value="0">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Break (Tol | Total)</label>
+            <div class="flex-row">
+                <input type="number" id="brk-tol" class="tol" placeholder="Tol." value="0">
+                <input type="number" id="brk-total" class="real" placeholder="Total" value="0">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Lunch (Tol | Total)</label>
+            <div class="flex-row">
+                <input type="number" id="alm-tol" class="tol" placeholder="Tol." value="0">
+                <input type="number" id="alm-total" class="real" placeholder="Total" value="0">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Unavailable (Tol | Total)</label>
+            <div class="flex-row">
+                <input type="number" id="una-tol" class="tol" placeholder="Tol." value="0">
+                <input type="number" id="una-total" class="real" placeholder="Total" value="0">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Compensacao (Tol | Total)</label>
+            <div class="flex-row">
+                <input type="number" id="comp-tol" class="tol" placeholder="Tol." value="0">
+                <input type="number" id="comp-total" class="real" placeholder="Total" value="0">
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-stats">
+        <div class="stat-item">
+            <span>Total Tolerância</span>
+            <strong id="res-tol">0</strong>
+        </div>
+        <div class="stat-item">
+            <span>Total Cumprido</span>
+            <strong id="res-real">0</strong>
+        </div>
+        <div class="stat-item">
+            <span>Saldo Final</span>
+            <strong id="res-saldo">0</strong>
+        </div>
+        <div class="stat-item">
+            <span>% Produtividade</span>
+            <strong id="res-saldo">0</strong>
+        </div>
+    </div>
+</div>
+
+<script>
+const displayTol = document.getElementById('res-tol');
+const displayReal = document.getElementById('res-real');
+const displaySaldo = document.querySelectorAll('#res-saldo')[0]; 
+const displayPercent = document.querySelectorAll('#res-saldo')[1];
+
+function calcular() {
+    const JORNADA_PREVISTA_MIN = 412; // 6h 52min
+    let somaTol = 0;
+    let somaReal = 0;
+    let totalDescontoProdutividade = 0;
+    let ganhoCompensacao = 0;
+
+    const groups = document.querySelectorAll('.input-group');
+
+    groups.forEach(group => {
+        const inputTol = group.querySelector('.tol');
+        const inputReal = group.querySelector('.real');
+        
+        const tol = Number(inputTol.value) || 0;
+        const real = Number(inputReal.value) || 0;
+
+        somaTol += tol;
+        somaReal += real;
+
+        // --- IDENTIFICAÇÃO DOS CAMPOS ESPECÍFICOS ---
+        const isCompensacao = inputReal.id === 'comp-total';
+        const isNonFB = inputReal.id === 'nfb-total';
+
+        if (isCompensacao) {
+            // Regra Compensação: O que foi cumprido além da tolerância soma na produtividade
+            if (real > tol) {
+                ganhoCompensacao = (real - tol);
+            }
+        } else if (isNonFB) {
+            // Exceção Non-FB: Todo minuto cumprido desconta da produtividade
+            totalDescontoProdutividade += real;
+        } else {
+            // Regra Geral: Apenas o que excede a tolerância desconta
+            if (real > tol) {
+                totalDescontoProdutividade += (real - tol);
+            }
+        }
+    });
+
+    // --- CÁLCULO DO SALDO FINAL (Mantido Original: Tol - Real) ---
+    // Nota: Como Compensação aumenta o 'somaReal', o saldo diminui naturalmente no cálculo matemático.
+    // Se quiser que a compensação ajude o saldo, o cálculo de saldo para ela é Real - Tol.
+    // Ajustado para que a compensação tenha impacto positivo no saldo final:
+    const saldoOriginal = (somaTol - somaReal) + (ganhoCompensacao * 2); 
+    // *2 porque ganhoCompensacao já foi subtraído uma vez em somaReal, então somamos o dobro para inverter.
+    
+    displayTol.innerText = somaTol + " min";
+    displayReal.innerText = somaReal + " min";
+    displaySaldo.innerText = (saldoOriginal > 0 ? "+" : "") + saldoOriginal + " min";
+    
+    displaySaldo.className = saldoOriginal < 0 ? "neg" : (saldoOriginal > 0 ? "pos" : "");
+
+    // --- CÁLCULO DA % PRODUTIVIDADE (Jornada +/- Ajustes) ---
+    // Minutos Entregues = Previsto - Descontos + Ganhos de Compensação
+    const minutosEfetivos = JORNADA_PREVISTA_MIN - totalDescontoProdutividade + ganhoCompensacao;
+    const percentual = (minutosEfetivos / JORNADA_PREVISTA_MIN) * 100;
+
+    const percentualFinal = Math.max(0, percentual).toFixed(2);
+    displayPercent.innerText = percentualFinal + "%";
+
+    // Alerta visual Meta 95%
+    displayPercent.className = percentual < 95 ? "neg" : "pos";
+}
+
+document.querySelector('.grid-inputs').addEventListener('input', calcular);
+calcular();
+</script>
+
+</body>
+</html>
